@@ -1,0 +1,1 @@
+Run command "python App.py" to run both frontend and backend apps.

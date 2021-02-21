@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://getbootstrap.com/docs/4.4/examples/album/ -->
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="Greeshma Maske" />
+  <meta name="generator" content="Jekyll v3.8.6" />
+  <title>XMeme</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+
+  <meta name="theme-color" content="#563d7c" />
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+  <!-- Custom styles for this template -->
+</head>
+
+<body cz-shortcut-listen="true">
+  <a name="top"></a>
+  <header>
+    <div class="collapse bg-dark" id="navbarHeader">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-8 col-md-7 py-4">
+            <h4 class="text-white">About</h4>
+            <p class="text-muted">
+              Meme Stream is a full stack application built using Flask and SQLAlchemy where users can 
+              post memes by providing their name, a caption for the meme and the URL for the meme image as input.
+            </p>
+          </div>
+          <div class="col-sm-4 offset-md-1 py-4">
+            <h4 class="text-white">Contact</h4>
+            <ul class="list-unstyled">
+              <li>
+                <a href="https://www.linkedin.com/in/greeshma-maske-2922141ab/" class="text-white">Follow on LinkedIn</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+      <div class="container d-flex justify-content-between">
+        <div class="navbar-brand d-flex align-items-center">
+          <strong>XMeme</strong>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+          aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main role="main">
+    <section class="jumbotron text-center">
+      <div class="container">
+        <h1>Meme Stream</h1>
+        <p>
+          <a href="https://getbootstrap.com/docs/4.4/examples/album/#" class="btn btn-primary my-2" data-toggle="modal" data-target="#mymodal">Add New Meme</a>
+        </p>
+      </div>
+    </section>
+    {% with messages = get_flashed_messages() %}
+ 
+                {% if messages %}
+ 
+                {% for message in messages %}
+ 
+                <div class="alert alert-success alert-dismissable" role="alert">
+ 
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+ 
+                        <span aria-hidden="true">x</span>
+ 
+                    </button>
+ 
+ 
+                {{message}}
+ 
+ 
+                </div>
+ 
+ 
+                {% endfor %}
+ 
+                {% endif %}
+                {% endwith %}
+     <!-- Modal Add -->
+     <div id="mymodal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Add Meme</h4>
+            </div>
+            <div class="modal-body">
+              <form action="/insert" method="POST">
+                  <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" class="form-control" name="name" required="1">
+                  </div>
+                  <div class="form-group">
+                    <label>Caption:</label>
+                    <input type="text" class="form-control" name="caption" required="1">
+                  </div>
+                  <div class="form-group">
+                    <label>URL:</label>
+                    <input type="url" class="form-control" name="url" required="1">
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Add Meme</button>
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="album py-5 bg-light">
+      <div class="container">
+        {% for row in memes %}
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+              <img src="{{row.url}}" width="100%" height="250">
+              <div class="card-body">
+                <b><big class="text-muted">{{row.name}}</big></b>
+                <div class="d-flex justify-content-between align-items-center">
+                </div>
+                <p class="card-text">
+                  {{row.caption}}
+                </p>
+
+              </div>
+              <div class="btn-group">
+                <a href="/update/{{row.id}}"<button type="button" class="btn btn-outline-secondary btn-xs" data-toggle="modal" data-target="#modaledit{{row.id}}">
+                  Editttt
+                </button></a>
+                <a href="/delete/{{row.id}}"<button type="button" class="btn btn-danger btn-outline btn-xs" onclick="return confirm('Are You Sure To Delete ?')">
+                  Delete
+                </button></a>
+
+              </div>
+            </div>
+          </div>
+          <!-- Modal Edit -->
+          <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Update Meme</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{{url_for('update')}}" method="POST">
+                        <div class="form-group">
+                          <label>Name: {{row.name}}</label>
+                            <input type="hidden"  name="id" value="{{row.id}}">
+
+                        </div>
+                        <div class="form-group">
+                          <label>Caption:</label>
+                          <input type="text" class="form-control" name="caption" value="{{row.caption}}">
+                        </div>
+                        <div class="form-group">
+                          <label>URL:</label>
+                          <input type="url" class="form-control" name="url" value="{{row.url}}">
+                        </div>
+                        <div class="form-group">
+                          <button class="btn btn-primary" type="submit">Update</button>
+                        </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="text-muted">
+    <div class="container">
+      <p class="float-right">
+        <a href="#top">Back to top</a>
+      </p>
+    </div>
+  </footer>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+</body>
+<div id="slickdeals" data-initialized="1"></div>
+
+</html>
